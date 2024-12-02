@@ -4,7 +4,7 @@
 
 (def filename "src/aoc2024/day2/input.txt")
 
-(defn- parse-input
+(defn parse-input
   [filename]
   (let [lines (str/split-lines (slurp filename))]
     (map
