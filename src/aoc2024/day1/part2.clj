@@ -2,7 +2,7 @@
   (:require
    [clojure.string :as str]))
 
-(def filename "src/aoc2024/day1/input2.txt")
+(def filename "src/aoc2024/day1/input.txt")
 
 (defn- parse-input
   [filename]
