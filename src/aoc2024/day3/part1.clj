@@ -16,18 +16,17 @@
 
 ;; part 2
 
-(def ops (re-seq #"mul\((\d{1,3}),(\d{1,3})\)|do\(\)|don't\(\)" data))
+(def parsed-ops (re-seq #"mul\((\d{1,3}),(\d{1,3})\)|do\(\)|don't\(\)" data))
 
 (:sum
  (reduce
-  (fn [{:keys [enabled sum]} [operation, s1, s2]]
+  (fn [{:keys [enabled sum] :as acc} [operation, s1, s2]]
     (case operation
       "don't()" {:enabled false :sum sum}
       "do()" {:enabled true :sum sum}
-      ;; default must be mul
       (if enabled
-        {:enabled true :sum (+ sum (* (parse-long s1) (parse-long s2)))}
-        {:enabled false :sum sum})))
+        {:enabled enabled :sum (+ sum (* (parse-long s1) (parse-long s2)))}
+        acc)))
   {:enabled true
    :sum 0}
-  ops))
+  parsed-ops))
