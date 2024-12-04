@@ -16,7 +16,7 @@
 (defn search
   [grid row col row-step col-step search-string]
   (if-not (seq search-string)
-    :XMAS
+    1
     (when (= (grid-nth grid row col) (first search-string))
       (search grid
               (row-step row)
@@ -27,21 +27,16 @@
 
 (defn solve
   [grid]
-  (->>
-   (for [search-string ["XMAS"]
-         row           (range (count input-lines))
-         col           (range (count (first input-lines)))]
-     (->> [(search grid row col inc      inc      search-string)
-           (search grid row col inc      identity search-string)
-           (search grid row col inc      dec      search-string)
-           (search grid row col identity inc      search-string)
-           (search grid row col identity dec      search-string)
-           (search grid row col dec      inc      search-string)
-           (search grid row col dec      identity search-string)
-           (search grid row col dec      dec      search-string)]
-          (filter some?)
-          count))
-   (apply +)))
+  (let [search-string "XMAS"]
+    (->>
+      (for [row (range (count input-lines))
+            col (range (count (first input-lines)))
+            row-fn [inc dec identity]
+            col-fn [inc dec identity]
+            :when (not= [row-fn col-fn] [identity identity])]
+        (search grid row col row-fn col-fn search-string))
+      (remove nil?)
+      (apply +))))
 
 (comment
  (solve input-lines))

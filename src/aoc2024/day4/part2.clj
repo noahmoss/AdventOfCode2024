@@ -5,7 +5,7 @@
 
 (defn search
   [grid row col]
-  (when
+  (if
     (and
      (= (part1/grid-nth grid row col) \A)
      (= #{\M \S}
@@ -13,16 +13,15 @@
               (part1/grid-nth grid (dec row) (dec col))])
         (set [(part1/grid-nth grid (inc row) (dec col))
               (part1/grid-nth grid (dec row) (inc col))])))
-    :X-MAS))
+    1
+    0))
 
 (defn solve
   [grid]
-  (->>
+  (apply +
    (for [row (range (count grid))
          col (range (count (first grid)))]
-    (search grid row col))
-   (filter some?)
-   count))
+    (search grid row col))))
 
 (comment
  (solve input-lines))
