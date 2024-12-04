@@ -9,12 +9,10 @@
     (and
      (= (part1/grid-nth grid row col) \A)
      (= #{\M \S}
-        (into #{}
-              [(part1/grid-nth grid (inc row) (inc col))
-               (part1/grid-nth grid (dec row) (dec col))])
-        (into #{}
-              [(part1/grid-nth grid (inc row) (dec col))
-               (part1/grid-nth grid (dec row) (inc col))])))
+        (set [(part1/grid-nth grid (inc row) (inc col))
+              (part1/grid-nth grid (dec row) (dec col))])
+        (set [(part1/grid-nth grid (inc row) (dec col))
+              (part1/grid-nth grid (dec row) (inc col))])))
     :X-MAS))
 
 (defn solve
@@ -25,20 +23,6 @@
     (search grid row col))
    (filter some?)
    count))
-
-(comment
-  (def grid
-    ["MMMSXXMASM"
-     "MSAMXMSMSA"
-     "AMXSXMAAMM"
-     "MSAMASMSMX"
-     "XMASAMXAMM"
-     "XXAMMXXAMA"
-     "SMSMSASXSS"
-     "SAXAMASAAA"
-     "MAMMMXMMMM"
-     "MXMXAXMASX"])
-  (solve grid))
 
 (comment
  (solve input-lines))
