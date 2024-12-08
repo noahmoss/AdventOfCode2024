@@ -20,14 +20,12 @@
       (nth line col))))
 
 (defn candidates
-  [[row1 col1] [row2 col2]]
+  [_grid [row1 col1] [row2 col2]]
   (let [row-step  (- row2 row1)
         col-step  (- col2 col1)
         next-pos  (fn [step-fn [row col]]
                     [(step-fn row row-step) (step-fn col col-step)])]
-    (concat
-     (take 1 (next (iterate (partial next-pos -) [row1 col1])))
-     (take 1 (next (iterate (partial next-pos +) [row2 col2]))))))
+    [(next-pos - [row1 col1]) (next-pos + [row2 col2])]))
 
 (defn locations
   [grid]
@@ -39,14 +37,14 @@
                {c [[row col]]})))))
 
 (defn antinode-locations
-  [grid]
+  [grid candidates-fn]
   (distinct
    (mapcat
     (fn [antennas]
       (->> (combo/combinations antennas 2)
-           (mapcat #(apply candidates %))
+           (mapcat #(apply candidates-fn grid %))
            (filter #(apply grid-nth grid %))))
     (vals (locations grid)))))
 
 (comment
- (count (antinode-locations grid)))
+ (count (antinode-locations grid candidates)))
